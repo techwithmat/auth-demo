@@ -7,6 +7,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/joho/godotenv"
+	"github.com/techwithmat/auth-golang/internal/user"
 	"github.com/techwithmat/auth-golang/pkg/database"
 )
 
@@ -26,9 +27,8 @@ func main() {
 	app := fiber.New()
 	app.Use(logger.New())
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World!")
-	})
+	userRepository := user.NewUserRepository(db)
+	user.InitUserRoutes(app, userRepository)
 
 	app.Listen(":3000")
 }
