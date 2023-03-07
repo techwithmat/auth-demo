@@ -22,7 +22,6 @@ type UserSession struct {
 
 type RegisterRequest struct {
 	Email                string `json:"email" validate:"required,email,min=6,max=32"`
-	Username             string `json:"username" validate:"required,min=3,max=32"`
 	Password             string `json:"password" validate:"required,eqfield=PasswordConfirmation,min=8,max=28"`
 	PasswordConfirmation string `json:"password_confirmation" validate:"required,min=8,max=28"`
 }

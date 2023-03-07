@@ -9,7 +9,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-const InsertQuery = "INSERT INTO users (email,username,password) VALUES ($1, $2, $3) RETURNING id"
+const InsertQuery = "INSERT INTO users (email,password) VALUES ($1, $2) RETURNING id"
 const GetByEmailQuery = "SELECT id, email, password FROM users WHERE email = $1"
 const CreateSessionQuery = "INSERT INTO sessions (user_id,session_token, expires_at) VALUES ($1, $2, $3)"
 const DeleteSessionQuery = "DELETE FROM sessions WHERE session_token = $1"
@@ -25,7 +25,7 @@ func NewUserRepository(db *pgx.Conn) userRepository {
 }
 
 func (repository *userRepo) Insert(ctx context.Context, user *RegisterRequest) error {
-	_, err := repository.db.Exec(ctx, InsertQuery, user.Email, user.Username, user.Password)
+	_, err := repository.db.Exec(ctx, InsertQuery, user.Email, user.Password)
 
 	if err != nil {
 		log.Println(err)
