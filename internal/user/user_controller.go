@@ -94,7 +94,42 @@ func (h *UserHandler) LogoutUser(c *fiber.Ctx) error {
 		Expires: expired,
 	})
 
-	return c.Status(200).JSON(fiber.Map{
-		"status": "success",
-	})
+	return c.Status(200).JSON(fiber.Map{"status": "success"})
+}
+
+func (h *UserHandler) GetUserSession(c *fiber.Ctx) error {
+	ctx := c.Context()
+	sessionToken := c.Cookies("session_token")
+
+	if sessionToken == "" {
+		return c.Status(401).JSON(fiber.Map{
+			"status":  "error",
+			"message": "missing session token",
+		})
+	}
+
+	userSession, err := h.repository.GetSession(ctx, sessionToken)
+
+	if err != nil {
+		log.Printf("Error getting session: %v", err)
+		return c.Status(400).JSON(fiber.Map{
+			"status":  "error",
+			"message": "invalid session token",
+		})
+	}
+
+	if time.Now().After(userSession.ExpiresAt) {
+		err := h.repository.DeleteUserSession(ctx, sessionToken)
+
+		if err != nil {
+			log.Printf("Error deleting session: %v", err)
+		}
+
+		return c.Status(401).JSON(fiber.Map{
+			"status":  "error",
+			"message": "session has expired, please log in again",
+		})
+	}
+
+	return c.Status(200).JSON(userSession)
 }

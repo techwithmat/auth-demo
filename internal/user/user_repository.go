@@ -13,6 +13,12 @@ const InsertQuery = "INSERT INTO users (email,password) VALUES ($1, $2) RETURNIN
 const GetByEmailQuery = "SELECT id, email, password FROM users WHERE email = $1"
 const CreateSessionQuery = "INSERT INTO sessions (user_id,session_token, expires_at) VALUES ($1, $2, $3)"
 const DeleteSessionQuery = "DELETE FROM sessions WHERE session_token = $1"
+const GetUserSession = `
+SELECT s.expires_at, u.username, u.email, u.id, u.avatar_url
+FROM sessions s
+INNER JOIN users u ON s.user_id = u.id
+WHERE session_token = $1
+`
 
 type userRepo struct {
 	db *pgx.Conn
@@ -83,4 +89,32 @@ func (repository *userRepo) DeleteUserSession(ctx context.Context, sessionToken 
 	}
 
 	return nil
+}
+
+func (repository *userRepo) GetSession(ctx context.Context, sessionToken string) (*GetSessionResponse, error) {
+	var (
+		userEmail, userId    string
+		username, userAvatar *string
+		expiresAt            time.Time
+	)
+
+	err := repository.db.
+		QueryRow(ctx, GetUserSession, sessionToken).
+		Scan(&expiresAt, &username, &userEmail, &userId, &userAvatar)
+
+	if err != nil {
+		log.Println(err)
+
+		return nil, err
+	}
+
+	return &GetSessionResponse{
+		User: User{
+			ID:        userId,
+			Email:     userEmail,
+			Username:  username,
+			AvatarUrl: userAvatar,
+		},
+		ExpiresAt: expiresAt,
+	}, nil
 }
