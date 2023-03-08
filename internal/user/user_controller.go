@@ -102,10 +102,7 @@ func (h *UserHandler) GetUserSession(c *fiber.Ctx) error {
 	sessionToken := c.Cookies("session_token")
 
 	if sessionToken == "" {
-		return c.Status(401).JSON(fiber.Map{
-			"status":  "error",
-			"message": "missing session token",
-		})
+		return c.SendStatus(304)
 	}
 
 	userSession, err := h.repository.GetSession(ctx, sessionToken)
@@ -124,6 +121,12 @@ func (h *UserHandler) GetUserSession(c *fiber.Ctx) error {
 		if err != nil {
 			log.Printf("Error deleting session: %v", err)
 		}
+
+		c.Cookie(&fiber.Cookie{
+			Name:    "session_token",
+			Value:   "",
+			Expires: time.Now().Add(-time.Hour * 24),
+		})
 
 		return c.Status(401).JSON(fiber.Map{
 			"status":  "error",

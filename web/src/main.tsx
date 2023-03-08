@@ -4,9 +4,12 @@ import './styles/globals.css'
 
 import { RouterProvider } from 'react-router-dom'
 import routes from './routes'
+import { SessionProvider } from './lib/useSession'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
-    <RouterProvider router={routes} />
+    <SessionProvider>
+      <RouterProvider router={routes} />
+    </SessionProvider>
   </React.StrictMode>
 )

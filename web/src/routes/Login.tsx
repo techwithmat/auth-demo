@@ -16,7 +16,12 @@ function Login() {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<LoginForm>()
+  } = useForm<LoginForm>({
+    defaultValues: {
+      email: 'jggenfhpdpgzkiynkq@bbitj.com',
+      password: 'CoPcx4NTWvyc9'
+    }
+  })
 
   const onSubmit: SubmitHandler<LoginForm> = async (data) => {
     setIsSending(true)

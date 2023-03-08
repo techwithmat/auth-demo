@@ -8,6 +8,7 @@ import { type SubmitHandler, useForm } from 'react-hook-form'
 import { useState } from 'react'
 import type { RegisterForm } from '../lib/types'
 import { useNavigate } from 'react-router-dom'
+import { REGISTER_URL } from '../lib/constants'
 
 function Register() {
   const navigate = useNavigate()
@@ -26,7 +27,7 @@ function Register() {
     setIsSending(true)
 
     try {
-      const response = await fetch('http://localhost:3000/auth/register', {
+      const response = await fetch(REGISTER_URL, {
         method: 'POST',
         credentials: 'include',
         headers: {
