@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/csrf"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/joho/godotenv"
 	"github.com/techwithmat/auth-golang/internal/user"
@@ -29,9 +30,10 @@ func main() {
 	app.Use(logger.New())
 	app.Use(cors.New(cors.Config{
 		AllowOrigins:     "http://localhost:5173",
-		AllowHeaders:     "Content-Type",
+		AllowHeaders:     "Content-Type, x-csrf-token",
 		AllowCredentials: true,
 	}))
+	app.Use(csrf.New())
 
 	userRepository := user.NewUserRepository(db)
 	user.InitUserRoutes(app, userRepository)

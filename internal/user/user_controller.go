@@ -136,3 +136,9 @@ func (h *UserHandler) GetUserSession(c *fiber.Ctx) error {
 
 	return c.Status(200).JSON(userSession)
 }
+
+func (h *UserHandler) GetCrsfToken(c *fiber.Ctx) error {
+	token := c.Cookies("csrf_")
+
+	return c.JSON(fiber.Map{"csrf_token": token})
+}

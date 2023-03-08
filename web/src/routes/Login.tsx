@@ -8,6 +8,7 @@ import { type SubmitHandler, useForm } from 'react-hook-form'
 import type { LoginForm } from '../lib/types'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { login } from '../lib/authServices'
 
 function Login() {
   const navigate = useNavigate()
@@ -27,16 +28,9 @@ function Login() {
     setIsSending(true)
 
     try {
-      const response = await fetch('http://localhost:3000/auth/login', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
+      const response = await login(data)
 
-      if (!response.ok) throw Error('An error occurred')
+      console.log(response)
 
       setIsSending(false)
       navigate('/profile')

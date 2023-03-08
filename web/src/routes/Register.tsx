@@ -8,7 +8,7 @@ import { type SubmitHandler, useForm } from 'react-hook-form'
 import { useState } from 'react'
 import type { RegisterForm } from '../lib/types'
 import { useNavigate } from 'react-router-dom'
-import { REGISTER_URL } from '../lib/constants'
+import { signIn } from '../lib/authServices'
 
 function Register() {
   const navigate = useNavigate()
@@ -27,16 +27,9 @@ function Register() {
     setIsSending(true)
 
     try {
-      const response = await fetch(REGISTER_URL, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
+      const response = await signIn(data)
 
-      if (!response.ok) throw Error('An error occurred')
+      console.log(response)
 
       setIsSending(false)
       navigate('/login')

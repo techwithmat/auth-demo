@@ -1,6 +1,6 @@
 import { useState, useMemo, createContext, useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { SESSION_URL } from './constants'
+import { DEVELOPMENT_URL } from './constants'
 import type { Session, UseSessionOptions, SessionContextValue, SessionProviderProps } from './types'
 
 const SessionContext = createContext<SessionContextValue | undefined>(undefined)
@@ -29,7 +29,7 @@ export function SessionProvider(props: SessionProviderProps) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetch(SESSION_URL, { credentials: 'include' })
+    fetch(`${DEVELOPMENT_URL}/auth/session`, { credentials: 'include' })
       .then((response) => {
         if (!response.ok) {
           setLoading(false)

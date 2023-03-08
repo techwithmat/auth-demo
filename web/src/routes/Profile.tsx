@@ -3,21 +3,22 @@ import Layout from '../components/Layout'
 import { useNavigate } from 'react-router-dom'
 import Button from '../components/Button'
 import { useSession } from '../lib/useSession'
-import { LOGIN_URL } from '../lib/constants'
+import { logOut } from '../lib/authServices'
 
 function Profile() {
   const { data } = useSession({ required: true })
   const navigator = useNavigate()
 
-  const handleLogout = () => {
-    fetch(LOGIN_URL, { method: 'DELETE', credentials: 'include' })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data)
+  const handleLogout = async () => {
+    try {
+      const response = await logOut()
 
-        navigator('/login')
-      })
-      .catch((error) => console.error(error))
+      console.log(response)
+
+      navigator('/login')
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   return (

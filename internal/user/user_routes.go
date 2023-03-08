@@ -20,4 +20,5 @@ func InitUserRoutes(router *fiber.App, repository userRepository) {
 	router.Post("/auth/login", handler.LoginUser)
 	router.Delete("/auth/logout", handler.LogoutUser)
 	router.Get("/auth/session", handler.GetUserSession)
+	router.Get("/auth/crsf", handler.GetCrsfToken)
 }
