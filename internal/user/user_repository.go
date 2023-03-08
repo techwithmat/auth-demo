@@ -14,7 +14,7 @@ const GetByEmailQuery = "SELECT id, email, password FROM users WHERE email = $1"
 const CreateSessionQuery = "INSERT INTO sessions (user_id,session_token, expires_at) VALUES ($1, $2, $3)"
 const DeleteSessionQuery = "DELETE FROM sessions WHERE session_token = $1"
 const GetUserSession = `
-SELECT s.expires_at, u.username, u.email, u.id, u.avatar_url
+SELECT s.expires_at, u.email, u.id
 FROM sessions s
 INNER JOIN users u ON s.user_id = u.id
 WHERE session_token = $1
@@ -94,13 +94,12 @@ func (repository *userRepo) DeleteUserSession(ctx context.Context, sessionToken 
 func (repository *userRepo) GetSession(ctx context.Context, sessionToken string) (*GetSessionResponse, error) {
 	var (
 		userEmail, userId    string
-		username, userAvatar *string
 		expiresAt            time.Time
 	)
 
 	err := repository.db.
 		QueryRow(ctx, GetUserSession, sessionToken).
-		Scan(&expiresAt, &username, &userEmail, &userId, &userAvatar)
+		Scan(&expiresAt, &userEmail, &userId)
 
 	if err != nil {
 		log.Println(err)
@@ -110,10 +109,8 @@ func (repository *userRepo) GetSession(ctx context.Context, sessionToken string)
 
 	return &GetSessionResponse{
 		User: User{
-			ID:        userId,
-			Email:     userEmail,
-			Username:  username,
-			AvatarUrl: userAvatar,
+			ID:    userId,
+			Email: userEmail,
 		},
 		ExpiresAt: expiresAt,
 	}, nil

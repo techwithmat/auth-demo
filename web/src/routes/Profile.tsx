@@ -24,20 +24,8 @@ function Profile() {
   return (
     <Layout title='Profile'>
       <div className='mb-4'>
-        <p>
-          <span className='font-bold text-lg text-violet-400'>UserID:</span> {data?.user?.user_id}
-        </p>
-        <p>
-          <span className='font-bold text-lg text-violet-400'>Username:</span>
-          {data?.user?.username}
-        </p>
-        <p>
-          <span className='font-bold text-lg text-violet-400'>Email:</span> {data?.user?.email}
-        </p>
-        <p>
-          <span className='font-bold text-lg text-violet-400'>AvatarURL:</span>
-          {data?.user?.avatar_url ?? 'No avatar set'}
-        </p>
+        <p>UserID: {data?.user?.user_id}</p>
+        <p>Email: {data?.user?.email}</p>
       </div>
       <Button onClick={handleLogout}>Logout</Button>
     </Layout>

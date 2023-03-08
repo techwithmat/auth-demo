@@ -6,11 +6,9 @@ import (
 )
 
 type User struct {
-	ID        string  `json:"user_id"`
-	Email     string  `json:"email"`
-	Password  string  `json:"password,omitempty"`
-	Username  *string `json:"username"`
-	AvatarUrl *string `json:"avatar_url"`
+	ID       string `json:"user_id"`
+	Email    string `json:"email"`
+	Password string `json:"password,omitempty"`
 }
 
 type UserSession struct {

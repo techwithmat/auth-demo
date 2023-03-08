@@ -1,8 +1,8 @@
 import type { LoginForm, RegisterForm } from './types'
-import { DEVELOPMENT_URL } from './constants'
+import { URL } from './constants'
 
 export async function getCrsfToken() {
-  const csrfResponse = await fetch(`${DEVELOPMENT_URL}/auth/crsf`, {
+  const csrfResponse = await fetch(`${URL}/auth/crsf`, {
     method: 'GET',
     credentials: 'include',
     headers: {
@@ -18,11 +18,12 @@ export async function getCrsfToken() {
 }
 
 export async function signIn(data: RegisterForm) {
-  const response = await fetch(`${DEVELOPMENT_URL}/auth/register`, {
+  const response = await fetch(`${URL}/auth/register`, {
     method: 'POST',
     credentials: 'include',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'X-Csrf-Token': await getCrsfToken()
     },
     body: JSON.stringify(data)
   })
@@ -33,7 +34,7 @@ export async function signIn(data: RegisterForm) {
 }
 
 export async function login(data: LoginForm) {
-  const response = await fetch(`${DEVELOPMENT_URL}/auth/login`, {
+  const response = await fetch(`${URL}/auth/login`, {
     method: 'POST',
     credentials: 'include',
     headers: {
@@ -49,7 +50,7 @@ export async function login(data: LoginForm) {
 }
 
 export async function logOut() {
-  const response = await fetch(`${DEVELOPMENT_URL}/auth/logout`, {
+  const response = await fetch(`${URL}/auth/logout`, {
     method: 'DELETE',
     credentials: 'include',
     headers: {

@@ -17,19 +17,20 @@ function Register() {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<RegisterForm>()
+  } = useForm<RegisterForm>({
+    defaultValues: {
+      email: 'jggenfhpdpgzkiynkq@bbitj.com',
+      password: 'CoPcx4NTWvyc9',
+      password_confirmation: 'CoPcx4NTWvyc9'
+    }
+  })
 
   const onSubmit: SubmitHandler<RegisterForm> = async (data) => {
     if (data.password !== data.password_confirmation) return
-
-    console.log(data)
-
     setIsSending(true)
 
     try {
-      const response = await signIn(data)
-
-      console.log(response)
+      await signIn(data)
 
       setIsSending(false)
       navigate('/login')

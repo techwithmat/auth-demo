@@ -11,8 +11,9 @@ import { useNavigate } from 'react-router-dom'
 import { login } from '../lib/authServices'
 
 function Login() {
-  const navigate = useNavigate()
   const [isSending, setIsSending] = useState<boolean>(false)
+  const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
@@ -28,9 +29,7 @@ function Login() {
     setIsSending(true)
 
     try {
-      const response = await login(data)
-
-      console.log(response)
+      await login(data)
 
       setIsSending(false)
       navigate('/profile')

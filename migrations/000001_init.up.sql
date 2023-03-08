@@ -4,8 +4,6 @@ CREATE TABLE users (
   id UUID PRIMARY KEY UNIQUE DEFAULT uuid_generate_v4(),
   email TEXT NOT NULL UNIQUE,
   password TEXT NOT NULL,
-  username VARCHAR(50) DEFAULT NULL,
-  avatar_url TEXT DEFAULT NULL,
   created_at TIMESTAMP DEFAULT NOW(),
   updated_at TIMESTAMP DEFAULT NOW()
 );
