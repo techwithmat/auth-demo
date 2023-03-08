@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -12,6 +13,16 @@ import (
 	"github.com/techwithmat/auth-golang/internal/user"
 	"github.com/techwithmat/auth-golang/pkg/database"
 )
+
+func getPort() string {
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		return ":3000"
+	}
+
+	return ":" + port
+}
 
 func main() {
 	if err := godotenv.Load(); err != nil {
@@ -29,7 +40,7 @@ func main() {
 	app := fiber.New()
 	app.Use(logger.New())
 	app.Use(cors.New(cors.Config{
-		AllowOrigins:     "http://localhost:5173",
+		AllowOrigins:     "http://localhost:5173, https://authentication-demo.vercel.app",
 		AllowHeaders:     "Content-Type, x-csrf-token",
 		AllowCredentials: true,
 	}))
@@ -38,5 +49,5 @@ func main() {
 	userRepository := user.NewUserRepository(db)
 	user.InitUserRoutes(app, userRepository)
 
-	app.Listen(":3000")
+	app.Listen(getPort())
 }

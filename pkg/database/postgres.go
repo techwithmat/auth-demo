@@ -11,10 +11,12 @@ import (
 
 func NewDBInstance() (*pgx.Conn, error) {
 	ctx := context.Background()
-	dns := fmt.Sprintf("postgres://%s:%s@localhost:5432/%s",
-		os.Getenv("POSTGRES_USER"),
-		os.Getenv("POSTGRES_PASSWORD"),
-		os.Getenv("POSTGRES_DB"),
+	dns := fmt.Sprintf("postgres://%s:%s@%s:%s/%s",
+		os.Getenv("PGUSER"),
+		os.Getenv("PGPASSWORD"),
+		os.Getenv("PGHOST"),
+		os.Getenv("PGPORT"),
+		os.Getenv("PGDATABASE"),
 	)
 
 	connection, err := pgx.Connect(ctx, dns)
