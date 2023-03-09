@@ -40,7 +40,3 @@ PGPORT=
 VITE_PRODUCTION_URL=
 VITE_DEVELOPMENT_URL=
 ```
-
-## ☁ Deploy
-
-- **Vercel**: [authentication-demo.vercel.app](authentication-demo.vercel.app)

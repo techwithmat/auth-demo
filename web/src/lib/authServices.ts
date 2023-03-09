@@ -1,8 +1,8 @@
 import type { LoginForm, RegisterForm } from './types'
 import { URL } from './constants'
 
-export async function getCrsfToken() {
-  const csrfResponse = await fetch(`${URL}/auth/crsf`, {
+export async function getCsrfToken() {
+  const csrfResponse = await fetch(`${URL}/auth/csrf`, {
     method: 'GET',
     credentials: 'include',
     headers: {
@@ -23,7 +23,7 @@ export async function signIn(data: RegisterForm) {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
-      'X-Csrf-Token': await getCrsfToken()
+      'X-Csrf-Token': await getCsrfToken()
     },
     body: JSON.stringify(data)
   })
@@ -39,7 +39,7 @@ export async function login(data: LoginForm) {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
-      'X-Csrf-Token': await getCrsfToken()
+      'X-Csrf-Token': await getCsrfToken()
     },
     body: JSON.stringify(data)
   })
@@ -54,7 +54,7 @@ export async function logOut() {
     method: 'DELETE',
     credentials: 'include',
     headers: {
-      'X-Csrf-Token': await getCrsfToken()
+      'X-Csrf-Token': await getCsrfToken()
     }
   })
 
