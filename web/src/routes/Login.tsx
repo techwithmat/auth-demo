@@ -6,14 +6,15 @@ import ErrorMessage from '../components/ErrorMessage'
 
 import { type SubmitHandler, useForm } from 'react-hook-form'
 import type { LoginForm } from '../lib/types'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { login } from '../lib/authServices'
+import { login } from '../lib/services/auth'
+import { useSession } from '../lib/hooks/useSession'
 
 function Login() {
   const [isSending, setIsSending] = useState<boolean>(false)
   const navigate = useNavigate()
-
+  const { data, status } = useSession()
   const {
     register,
     handleSubmit,
@@ -24,6 +25,10 @@ function Login() {
       password: 'CoPcx4NTWvyc9'
     }
   })
+
+  useEffect(() => {
+    if (data) navigate('/profile')
+  }, [status])
 
   const onSubmit: SubmitHandler<LoginForm> = async (data) => {
     setIsSending(true)

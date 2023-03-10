@@ -1,5 +1,5 @@
-import type { LoginForm, RegisterForm } from './types'
-import { URL } from './constants'
+import type { LoginForm, RegisterForm } from '../types'
+import { URL } from '../constants'
 
 export async function getCsrfToken() {
   const csrfResponse = await fetch(`${URL}/auth/csrf`, {
@@ -23,7 +23,7 @@ export async function signIn(data: RegisterForm) {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
-      'X-Csrf-Token': await getCsrfToken()
+      'X-Csrf-Token': (await getCsrfToken()) ?? ''
     },
     body: JSON.stringify(data)
   })
@@ -39,7 +39,7 @@ export async function login(data: LoginForm) {
     credentials: 'include',
     headers: {
       'Content-Type': 'application/json',
-      'X-Csrf-Token': await getCsrfToken()
+      'X-Csrf-Token': (await getCsrfToken()) ?? ''
     },
     body: JSON.stringify(data)
   })
@@ -54,11 +54,24 @@ export async function logOut() {
     method: 'DELETE',
     credentials: 'include',
     headers: {
-      'X-Csrf-Token': await getCsrfToken()
+      'X-Csrf-Token': (await getCsrfToken()) ?? ''
     }
   })
 
   if (!response.ok) throw Error('An error occurred')
 
   return response.json()
+}
+
+export async function getSession() {
+  try {
+    const res = await fetch(`${URL}/auth/session`, { credentials: 'include' })
+    if (!res.ok) throw Error('Error retrieving session')
+
+    const data = await res.json()
+    return Object.keys(data).length > 0 ? data : null
+  } catch (error) {
+    console.error(error)
+    return null
+  }
 }

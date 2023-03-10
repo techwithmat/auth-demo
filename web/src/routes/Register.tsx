@@ -5,14 +5,16 @@ import Input from '../components/Input'
 import ErrorMessage from '../components/ErrorMessage'
 
 import { type SubmitHandler, useForm } from 'react-hook-form'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { RegisterForm } from '../lib/types'
 import { useNavigate } from 'react-router-dom'
-import { signIn } from '../lib/authServices'
+import { signIn } from '../lib/services/auth'
+import { useSession } from '../lib/hooks/useSession'
 
 function Register() {
   const navigate = useNavigate()
   const [isSending, setIsSending] = useState<boolean>(false)
+  const { data, status } = useSession({ required: true })
   const {
     register,
     handleSubmit,
@@ -24,6 +26,10 @@ function Register() {
       password_confirmation: 'CoPcx4NTWvyc9'
     }
   })
+
+  useEffect(() => {
+    if (data) navigate('/profile')
+  }, [status])
 
   const onSubmit: SubmitHandler<RegisterForm> = async (data) => {
     if (data.password !== data.password_confirmation) return
@@ -39,6 +45,7 @@ function Register() {
       console.error(error)
     }
   }
+
   return (
     <Layout title='Register'>
       <form onSubmit={handleSubmit(onSubmit)}>

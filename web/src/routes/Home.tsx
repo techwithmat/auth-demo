@@ -1,16 +1,13 @@
 import Layout from '../components/Layout'
 import LinkButton from '../components/LinkButton'
-import LINKS from '../lib/links'
 
 function Home() {
   return (
     <Layout title='🔐 AuthDemo'>
       <div className='flex flex-col justify-center gap-2'>
-        {LINKS?.map(({ href, text }, index) => (
-          <LinkButton to={href} key={index}>
-            {text}
-          </LinkButton>
-        ))}
+        <LinkButton to='/profile'>Profile</LinkButton>
+        <LinkButton to='/register'>Register</LinkButton>
+        <LinkButton to='/login'>Login</LinkButton>
       </div>
     </Layout>
   )
